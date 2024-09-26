@@ -1,9 +1,9 @@
-# Jugaad Lang
+# Simple Lang
 
 
 ## Overview
 
-**Jugaad Lang** is a new programming language designed for flexibility and ease of use, incorporating innovative syntax inspired by everyday language. This project aims to provide developers with a unique programming experience.
+**Simple Lang** is a new programming language designed for flexibility and ease of use, incorporating innovative syntax inspired by everyday language. This project aims to provide developers with a unique programming experience.
 
 ## Features
 
@@ -31,10 +31,10 @@ Jugaad Lang's grammar is defined using ANTLR, supporting key constructs:
 
 ## Getting Started
 
-To get started with Jugaad Lang:
+To get started with Simple Lang:
 
 1. Create a file with the `.jd` extension for your code (e.g., `example.jd`).
-2. Write your code using the Jugaad Lang syntax in the `.jd` file.
+2. Write your code using the Simple Lang syntax in the `.jd` file.
 3. Run your code using the appropriate interpreter or compiler (details coming soon).
 
 
