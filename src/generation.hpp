@@ -19,30 +19,35 @@ public:
 
     // Function to handle expression nodes
     void generate_expression(const NodeExpn& expression) {
-        if (std::holds_alternative<NodeExpIntlit>(expression.var)) {
-            // Handle integer literal, load it into a register
-            auto int_lit = std::get<NodeExpIntlit>(expression.var).int_lit;
-            assembly_code << "mov eax, " << int_lit.value.value() << "\n";
-        } else if (std::holds_alternative<NodeExpnIdent>(expression.var)) {
-            // Handle identifier (variable), assuming we map them to registers or memory
-            auto ident = std::get<NodeExpnIdent>(expression.var).ident;
-            assembly_code << "mov eax, [" << ident.value.value() << "]\n";
-        }
+        struct ExprVisitor {
+            void operator()(const NodeExpIntlit& intLit) const {
+                codegen->assembly_code << "mov eax, " << intLit.int_lit.value.value() << "\n";
+            }
+            void operator()(const NodeExpnIdent ident) const {
+                codegen->assembly_code << "mov eax, [" << ident.ident.value.value() << "]\n";
+            }
+            CodeGenerator* codegen;
+        };
+        ExprVisitor visitor {.codegen = this};
+        std::visit(visitor, expression.var);
     }
 
     // Function to handle statement nodes
     void generate_statement(const NodeSmt& statement) {
-        if (std::holds_alternative<NodeSmtExit>(statement.var)) {
-            // Handle 'khatam' (return statement)
-            auto exit_stmt = std::get<NodeSmtExit>(statement.var);
-            generate_expression(exit_stmt.expn);
-            assembly_code << "ret\n";  // Return the value in eax
-        } else if (std::holds_alternative<NodeSmtjug>(statement.var)) {
-            // Handle 'juggad' (variable assignment)
-            auto jug_stmt = std::get<NodeSmtjug>(statement.var);
-            generate_expression(jug_stmt.expn);
-            assembly_code << "mov [" << jug_stmt.ident.value.value() << "], eax\n";  // Assign eax to variable
-        }
+        struct StmtVisitor {
+            void operator()(const NodeSmtExit& exitStmt) const {
+                codegen->generate_expression(exitStmt.expn);
+                codegen->assembly_code << "ret\n";
+            }
+            void operator()(const NodeSmtjug& jugStmt) const {
+                codegen->generate_expression(jugStmt.expn);
+                codegen->assembly_code << "mov [" << jugStmt.ident.value.value() << "], eax\n";  // Assign eax to variable
+            }
+            CodeGenerator* codegen;
+        };
+        StmtVisitor visitor {.codegen =  this};
+        // Visit the function and on the basis of what is contained in var
+        std::visit(visitor, statement.var);
     }
 
     // Function to handle the entire program
@@ -53,7 +58,7 @@ public:
     }
 
     // Save the generated assembly to a file
-    void save_assembly_to_file(const std::string& filename) {
+    void save_assembly_to_file(const std::string& filename) const {
         std::ofstream outfile(filename);
         if (!outfile) {
             std::cerr << "Error opening file for writing: " << filename << std::endl;
