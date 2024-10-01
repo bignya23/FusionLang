@@ -22,33 +22,31 @@ int main(const int argc , char *argv[]) {
         contents_stream << input.rdbuf();
         contents = contents_stream.str();
     }
-
+    //Convert into tokens
     Tokenizer tokenizer(contents);
     std::vector<Token> tokens = tokenizer.tokenize();
 
+    //Parse into tokens ans generate vectors of
     Parser parser(tokens);
+    std::optional<NodePrg> prog = parser.parse_prg();
 
-    std::optional<NodePrg> tree = parser.parse_prg();
-
-    if(!tree.has_value()) {
-        std::cerr << "No valid values" << std::endl;
+    if(!prog.has_value()) {
+        std::cerr << "Some Invalid statements are there!!" << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    CodeGenerator generator;
+    Generator generator((prog.value()));
+    std::string asm_code = generator.gen();
+    {
+        std::fstream file("out.asm" , std::ios::out);
+        file << asm_code;
 
-    generator.generate_program(tree.value());
+    }
 
-    generator.save_assembly_to_file("out.asm");
-
-
-
+    // For system
     system("nasm -f win64 -o out.o out.asm");
     system("ld -o output.exe out.o");
     system("output.exe");
-
-
-
 
     return EXIT_SUCCESS;
 }

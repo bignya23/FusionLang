@@ -1,6 +1,6 @@
-// JugaadSyntax.g4 - ANTLR grammar file for Jugaad Syntax
+// SimpleGrammar.g4 - ANTLR grammar file for Jugaad Syntax
 
-grammar JugaadSyntax;
+grammar SimpleGrammar;
 
 // Parser rules
 program : statement+ ;
@@ -14,7 +14,7 @@ statement : printStatement
           ;
 
 printStatement : 'bolo' '(' (STRING | variable) ')' ';' ;
-variableDeclaration : 'jugaad' variable '=' expression ';' ;
+variableDeclaration : 'naam' variable '=' expression ';' ;
 functionDefinition : 'kaamChalau' ID '(' (variable (',' variable)*)? ')' '{' statement* 'khatam' expression ';' '}' ;
 ifStatement : 'dekhteHain' '(' expression ')' '{' statement* '}' ('dekhLenge' '{' statement* '}')? ;
 loopStatement : ('firse' | 'jabTak') '(' expression ')' '{' statement* '}' ;

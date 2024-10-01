@@ -1,6 +1,10 @@
-section .data
-section .text
 global _start
 _start:
-mov eax, 0
-ret
+    mov rax, 0
+    push rax
+    mov rax, 60
+    pop rdi
+    syscall
+    mov rax , 60
+    mov rdi ,0
+    syscall

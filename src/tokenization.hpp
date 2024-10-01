@@ -1,9 +1,8 @@
 #pragma once
 
-
 //Types of Tokens
 enum TokenType{
-    RETURN,INT_LIT,SEMI,OPEN_P,CLOSE_P,IDENT,JUGAAD,EQUAL,BOLO
+    RETURN,INT_LIT,SEMI,OPEN_P,CLOSE_P,IDENT,NAAM,EQUAL,BOLO
 };
 // Token Type and val which is optional
 struct Token {
@@ -45,8 +44,8 @@ public:
                 if(buf == "khatam") {
                     tokens.push_back({.type = TokenType::RETURN});
                 }
-                else if(buf == "juggad") {
-                    tokens.push_back({.type = TokenType::JUGAAD});
+                else if(buf == "naam") {
+                    tokens.push_back({.type = TokenType::NAAM});
 
                 }
                 // else if(buf == "bolo") {

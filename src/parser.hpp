@@ -14,12 +14,12 @@ struct NodeExpn {
 struct NodeSmtExit {
     NodeExpn expn;
 };
-struct NodeSmtjug {
+struct NodeSmtnaam {
     Token ident;
     NodeExpn expn;
 };
 struct NodeSmt {
-    std::variant<NodeSmtExit, NodeSmtjug> var;
+    std::variant<NodeSmtExit, NodeSmtnaam> var;
 };
 struct NodePrg {
     std::vector<NodeSmt> smts;
@@ -82,32 +82,32 @@ public:
             return smt_node;
         }
 
-        // Parse 'jugaad' (variable assignment) statement
-        else if (peek().has_value() && peek().value().type == TokenType::JUGAAD &&
-                 peek(1).has_value() && peek(1).value().type == TokenType::IDENT &&
-                 peek(2).has_value() && peek(2).value().type == TokenType::EQUAL) {
+        // Parse 'naam' (variable assignment) statement
+        else if (peek().has_value() && peek().value().type == TokenType::NAAM &&
+            peek(1).has_value() && peek(1).value().type == TokenType::IDENT &&
+            peek(2).has_value() && peek(2).value().type == TokenType::EQUAL) {
 
-            consume();  // consume 'jugaad'
+            consume();  // consume 'naam'
 
-            auto stmt_jug = NodeSmtjug({.ident = consume()});  // consume IDENT
+            auto stmt_jug = NodeSmtnaam({.ident = consume()});  // consume IDENT
             consume();  // consume '='
 
             if (auto node_expr = parse_expn()) {
                 stmt_jug.expn = node_expr.value();
             } else {
-                std::cerr << "Error: Failed to parse expression for 'jugaad'" << std::endl;
+                std::cerr << "Error: Failed to parse expression for 'Naam'" << std::endl;
                 exit(EXIT_FAILURE);
             }
 
             if (peek().has_value() && peek().value().type == TokenType::SEMI) {
                 consume();  // consume ';'
             } else {
-                std::cerr << "Expected ';' after 'jugaad' statement" << std::endl;
+                std::cerr << "Expected ';' after 'Naam' statement" << std::endl;
                 exit(EXIT_FAILURE);
             }
 
             return NodeSmt{.var = stmt_jug};
-                 }
+        }
 
         // If no valid statement is found
         else {
@@ -115,7 +115,7 @@ public:
         }
     }
 
-    // TO combine all the statements in a single Program
+    // To combine all the statements in a single Program
     std::optional<NodePrg> parse_prg() {
         NodePrg prg;
         while(peek().has_value()) {
