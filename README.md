@@ -18,9 +18,9 @@ Jugaad Lang's grammar is defined using ANTLR, supporting key constructs:
 - **Statements**: Includes print statements, variable declarations, function definitions, conditionals, loops, and exit statements.
 - **Keywords**:
   - `bolo`: For printing output.
-  - `naam`: To declare variables.
+  - `naam`: To declare variables. // IMPLEMENTED
   - `kaamChalau`: For defining functions.
-  - `khatam`: To exit functions or statements.
+  - `khatam`: To exit functions or statements. //IMPLEMENTED
   - `dekhteHain`: For conditional statements.
   - `firse`/`jabTak`: For loops.
 
