@@ -14,11 +14,11 @@ statement : printStatement
           ;
 
 printStatement : 'bolo' '(' (STRING | variable) ')' ';' ;
-variableDeclaration : 'naam' variable '=' expression ';' ;
+variableDeclaration : 'naam' variable '=' expression | expression(NUMBER)';' ;
 functionDefinition : 'kaamChalau' ID '(' (variable (',' variable)*)? ')' '{' statement* 'khatam' expression ';' '}' ;
 ifStatement : 'dekhteHain' '(' expression ')' '{' statement* '}' ('dekhLenge' '{' statement* '}')? ;
 loopStatement : ('firse' | 'jabTak') '(' expression ')' '{' statement* '}' ;
-exitStatement : 'khatam' variable ';' ;  // Implemented
+exitStatement : 'khatam' variable | expression(NUMBER) ';' ;  // Implemented
 functionCall : ID '(' (expression (',' expression)*)? ')' ';' ;
 
 // Lexer rules
@@ -27,6 +27,7 @@ expression : variable
            | STRING
            | NUMBER
            | expression ('*' | '/' | '+' | '-') expression
+           |
            ;
 ID : [a-zA-Z_][a-zA-Z_0-9]* ;
 NUMBER : [0-9]+ ;

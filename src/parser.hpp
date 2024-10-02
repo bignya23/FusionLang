@@ -89,11 +89,11 @@ public:
 
             consume();  // consume 'naam'
 
-            auto stmt_jug = NodeSmtnaam({.ident = consume()});  // consume IDENT
+            auto stmt_naam = NodeSmtnaam({.ident = consume()});  // consume IDENT
             consume();  // consume '='
 
             if (auto node_expr = parse_expn()) {
-                stmt_jug.expn = node_expr.value();
+                stmt_naam.expn = node_expr.value();
             } else {
                 std::cerr << "Error: Failed to parse expression for 'Naam'" << std::endl;
                 exit(EXIT_FAILURE);
@@ -106,7 +106,7 @@ public:
                 exit(EXIT_FAILURE);
             }
 
-            return NodeSmt{.var = stmt_jug};
+            return NodeSmt{.var = stmt_naam};
         }
 
         // If no valid statement is found

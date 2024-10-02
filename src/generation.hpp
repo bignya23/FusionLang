@@ -1,12 +1,30 @@
 #pragma once
 #include <fstream>
 #include <string>
+#include <unordered_map>
 #include "../src/parser.hpp"
 
 class Generator {
 private:
     NodePrg m_prg;
     std::stringstream m_output;
+    size_t m_stack_size = 0;
+
+
+    void push(const std::string& reg) {
+        m_output << "    push " << reg << "\n";
+        m_stack_size++;
+    }
+    void pop(const std::string& reg) {
+        m_output << "    pop " << reg << "\n";
+        m_stack_size--;
+    }
+
+    struct Var {
+        size_t m_size_loc;
+    };
+
+    std::unordered_map<std::string, Var> m_vars;
 
 public:
     //Constructor initializer
@@ -18,11 +36,20 @@ public:
 
         struct ExpnVisitor {
             Generator* gen;
+            // For INT_LIT
             void operator()(const NodeExpIntlit& int_lit_expn) const {
                 gen->m_output << "    mov rax, " << int_lit_expn.int_lit.value.value() << "\n";
-                gen->m_output << "    push rax\n";
+                gen->push("rax");
             }
+
+            // For identifiers(There could be also expressions such as naam x = y;) | Searching for y
             void operator()(const NodeExpnIdent& ident_expn) const {
+                if (!gen->m_vars.contains(ident_expn.ident.value.value())) {
+                    std::cerr << "Could not find identifier " << ident_expn.ident.value.value() << "\n";
+                    exit(EXIT_FAILURE);
+                }
+                const auto& var = gen->m_vars.at(ident_expn.ident.value.value());
+                gen->m_output << "    push QWORD [rsp + " << (gen->m_stack_size - var.m_size_loc -1) * 8 << "]\n";
 
             }
 
@@ -40,11 +67,18 @@ public:
             void operator()(const NodeSmtExit& smts_exit) const {
                 gen->gen_expn(smts_exit.expn);
                 gen->m_output << "    mov rax, 60\n";
-                gen->m_output << "    pop rdi\n";
+                gen->pop("rdi");
                 gen->m_output << "    syscall\n";
             }
             void operator()(const NodeSmtnaam& smts_naam) const {
-
+                if(gen->m_vars.contains(smts_naam.ident.value.value())) {
+                    std::cerr << "Conflict in identifier " << smts_naam.ident.value.value() << std::endl;
+                    exit(EXIT_FAILURE);
+                }
+                else {
+                    gen->m_vars.insert({smts_naam.ident.value.value(), Var{.m_size_loc = gen->m_stack_size}});
+                    gen->gen_expn(smts_naam.expn);
+                }
             }
         };
 

@@ -1,1 +1,3 @@
-khatam 0;
+naam x = 10;
+naam y = 2;
+khatam x;
