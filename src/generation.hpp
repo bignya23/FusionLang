@@ -36,7 +36,7 @@ public:
 
         struct ExpnVisitor {
             Generator* gen;
-            // For INT_LIT
+            // For INT_LITs
             void operator()(const NodeExpIntlit& int_lit_expn) const {
                 gen->m_output << "    mov rax, " << int_lit_expn.int_lit.value.value() << "\n";
                 gen->push("rax");
