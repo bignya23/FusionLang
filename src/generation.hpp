@@ -43,13 +43,20 @@ public:
             }
 
             // For identifiers(There could be also expressions such as naam x = y;) | Searching for y
-            void operator()(const NodeExpnIdent& ident_expn) const {
+            void operator()(const NodeExpnIdent& ident_expn)  {
                 if (!gen->m_vars.contains(ident_expn.ident.value.value())) {
                     std::cerr << "Could not find identifier " << ident_expn.ident.value.value() << "\n";
                     exit(EXIT_FAILURE);
                 }
-                const auto& var = gen->m_vars.at(ident_expn.ident.value.value());
-                gen->m_output << "    push QWORD [rsp + " << (gen->m_stack_size - var.m_size_loc -1) * 8 << "]\n";
+
+
+                const auto&[m_size_loc] = gen->m_vars.at(ident_expn.ident.value.value());
+                std::stringstream output;
+                // std::cerr << "Accessing variable '" << ident_expn.ident.value.value() << "' at stack location: "
+                // << (gen->m_stack_size - m_size_loc - 1) * 8   << "\n";
+
+                output << "QWORD [rsp + " << (gen->m_stack_size - m_size_loc -1) * 8 << "]";
+                gen->push(output.str());
 
             }
 
@@ -98,8 +105,8 @@ public:
         }
 
 
-        m_output << "    mov rax , 60\n";
-        m_output << "    mov rdi ,0\n";
+        m_output << "    mov rax, 60\n";
+        m_output << "    mov rdi, 0\n";
         m_output << "    syscall\n";
         return m_output.str();
     }

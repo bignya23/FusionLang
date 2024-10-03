@@ -7,8 +7,10 @@
   },
   "ExpandedNodes": [
     "",
+    "\\cmake-build-debug",
+    "\\docs",
     "\\src"
   ],
-  "SelectedNode": "\\src\\generation.hpp",
+  "SelectedNode": "\\cmake-build-debug\\main.asm",
   "PreviewInSolutionExplorer": false
 }

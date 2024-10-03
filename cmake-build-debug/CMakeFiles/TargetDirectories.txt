@@ -1,3 +1,0 @@
-D:/SimpleLang/cmake-build-debug/CMakeFiles/JugaadLang.dir
-D:/SimpleLang/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/SimpleLang/cmake-build-debug/CMakeFiles/rebuild_cache.dir

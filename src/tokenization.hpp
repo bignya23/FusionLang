@@ -2,7 +2,7 @@
 
 //Types of Tokens
 enum TokenType{
-    RETURN,INT_LIT,SEMI,OPEN_P,CLOSE_P,IDENT,NAAM,EQUAL,BOLO
+    RETURN,INT_LIT,SEMI,OPEN_P,CLOSE_P,IDENT,NAAM,EQUAL,BOLO,QUOTE
 };
 // Token Type and val which is optional
 struct Token {
@@ -29,8 +29,9 @@ private:
     }
 public:
     // To Convert to Tokens
-    inline explicit Tokenizer(std::string str) : m_str(std::move(str)) {}
-    inline std::vector<Token> tokenize() {
+    explicit Tokenizer(std::string str) : m_str(std::move(str)) {}
+
+    std::vector<Token> tokenize() {
         std::vector<Token> tokens;
         std::string buf;
         while(peek().has_value()) {
@@ -46,11 +47,10 @@ public:
                 }
                 else if(buf == "naam") {
                     tokens.push_back({.type = TokenType::NAAM});
-
                 }
-                // else if(buf == "bolo") {
-                //     tokens.push_back({.type = TokenType::BOLO});
-                // }
+                else if(buf == "bolo") {
+                    tokens.push_back({.type = TokenType::BOLO});
+                }
                 else {
                     tokens.push_back({.type = TokenType::IDENT,.value = buf});
                 }
@@ -80,6 +80,10 @@ public:
             }
             else if(peek().value() == ';') {
                 tokens.push_back({.type = TokenType::SEMI});
+                consume();
+            }
+            else if(peek().value() == '"') {
+                tokens.push_back({.type = TokenType::QUOTE});
                 consume();
             }
             else if(peek().value() == '=') {
