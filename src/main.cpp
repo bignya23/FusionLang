@@ -38,20 +38,20 @@ int main(const int argc , char *argv[]) {
     Generator generator((prog.value()));
     std::string asm_code = generator.gen();
     {
-        std::fstream file("main.asm" , std::ios::out);
+        std::fstream file("out.asm" , std::ios::out);
         file << asm_code;
 
     }
 
      //For Unix
-     system("nasm -f elf64 -o main.o main.asm");
-     system("ld -o output main.o");
-     system("./output");
+     // system("nasm -f elf64 -o out.o out.asm");
+     // system("ld -o output out.o");
+     // system("./output");
 
-    /* For Windows
+    // For Windows
     system("nasm -f win64 -o out.o out.asm");
     system("ld -o output.exe out.o");
-    system("output.exe");*/
+    system("output.exe");
 
     return EXIT_SUCCESS;
 }

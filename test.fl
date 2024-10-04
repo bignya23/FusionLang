@@ -1,2 +1,5 @@
+
+naam x = 10;
+
 bolo("Hello World");
 khatam 0;

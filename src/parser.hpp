@@ -5,22 +5,34 @@
 struct NodeExpIntlit {
     Token int_lit;
 };
+
 struct NodeExpnIdent {
     Token ident;
 };
+
 struct NodeExpn {
     std::variant<NodeExpIntlit, NodeExpnIdent> var;
 };
+
 struct NodeSmtExit {
     NodeExpn expn;
 };
+
 struct NodeSmtnaam {
     Token ident;
     NodeExpn expn;
 };
-struct NodeSmt {
-    std::variant<NodeSmtExit, NodeSmtnaam> var;
+
+struct NodeSmtPrint
+{
+    Token ident;
+    int size{};
 };
+
+struct NodeSmt {
+    std::variant<NodeSmtExit, NodeSmtnaam, NodeSmtPrint> var;
+};
+
 struct NodePrg {
     std::vector<NodeSmt> smts;
 };
@@ -83,7 +95,7 @@ public:
         }
 
         // Parse 'naam' (variable assignment) statement
-        else if (peek().has_value() && peek().value().type == TokenType::NAAM &&
+        if (peek().has_value() && peek().value().type == TokenType::NAAM &&
             peek(1).has_value() && peek(1).value().type == TokenType::IDENT &&
             peek(2).has_value() && peek(2).value().type == TokenType::EQUAL) {
 
@@ -107,6 +119,31 @@ public:
             }
 
             return NodeSmt{.var = stmt_naam};
+        }
+        //Parse "bolo" Print Statement
+        if(peek().has_value() && peek().value().type == TokenType::BOLO &&
+            peek(1).has_value() && peek().value().type == TokenType::OPEN_P &&
+            peek(2).has_value() && peek().value().type == TokenType::IDENT &&
+            peek(3).has_value() && peek().value().type == TokenType::CLOSE_P)
+        {
+            consume();
+            consume();
+
+
+            auto bolo_smt = NodeSmtPrint{.ident = consume()};
+
+            consume();
+
+            if(peek().has_value() && peek().value().type == TokenType::SEMI)
+            {
+                consume();
+            }
+            else
+            {
+                std::cerr << "Expected ';' after 'bolo' statement" << std::endl;
+                exit(EXIT_FAILURE);
+            }
+            return NodeSmt{.var = bolo_smt};
         }
 
         // If no valid statement is found

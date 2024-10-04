@@ -4,11 +4,14 @@
 #include <unordered_map>
 #include "../src/parser.hpp"
 
+
+
 class Generator {
 private:
     NodePrg m_prg;
     std::stringstream m_output;
     size_t m_stack_size = 0;
+    int m_unique_msg_name = 0;
 
 
     void push(const std::string& reg) {
@@ -87,28 +90,50 @@ public:
                     gen->gen_expn(smts_naam.expn);
                 }
             }
+            void operator()(const NodeSmtPrint& smts_bolo) const
+            {
+
+            }
         };
 
         SmtsVisitor visitor{.gen = this};
         std::visit(visitor , smts.var);
     }
 
+
+
+
+
     //Combine all the statements
     [[nodiscard]] std::string gen() {
-
-        m_output << "global _start\n" ;
-        m_output << "_start:\n";
-
+        m_output << "section .data\n";
         for(const auto& node : m_prg.smts) {
-            gen_smts(node);
-
+            if(auto* nstm = std::get_if<NodeSmtPrint>(&node.var))
+            {
+                m_output << "   msg_"<< m_unique_msg_name <<  " " << "db '" << nstm->ident.value.value() <<  "', 0xA\n";
+            }
         }
 
+        m_output << "section .text\n";
+        m_output << "   global _start\n" ;
+        m_output << "   _start:\n";
 
-        m_output << "    mov rax, 60\n";
-        m_output << "    mov rdi, 0\n";
-        m_output << "    syscall\n";
+        for(const auto& node : m_prg.smts) {
+            if(auto* nstm = std::get_if<NodeSmtPrint>(&node.var))
+            {
+
+            }
+            else {
+                gen_smts(node);
+            }
+
+        }
+        m_output << "       mov rax, 60\n";
+        m_output << "       mov rdi, 0\n";
+        m_output << "       syscall\n";
+
         return m_output.str();
     }
+
 
 };
