@@ -1,5 +1,6 @@
 #pragma once
 #include <fstream>
+#include <queue>
 #include <string>
 #include <unordered_map>
 #include "../src/parser.hpp"
@@ -12,14 +13,14 @@ private:
     std::stringstream m_output;
     size_t m_stack_size = 0;
     int m_unique_msg_name = 0;
-
+    std::queue<std::string> m_queue_data;
 
     void push(const std::string& reg) {
-        m_output << "    push " << reg << "\n";
+        m_output << "      push " << reg << "\n";
         m_stack_size++;
     }
     void pop(const std::string& reg) {
-        m_output << "    pop " << reg << "\n";
+        m_output << "      pop " << reg << "\n";
         m_stack_size--;
     }
 
@@ -41,12 +42,12 @@ public:
             Generator* gen;
             // For INT_LITs
             void operator()(const NodeExpIntlit& int_lit_expn) const {
-                gen->m_output << "    mov rax, " << int_lit_expn.int_lit.value.value() << "\n";
+                gen->m_output << "      mov rax, " << int_lit_expn.int_lit.value.value() << "\n";
                 gen->push("rax");
             }
 
             // For identifiers(There could be also expressions such as naam x = y;) | Searching for y
-            void operator()(const NodeExpnIdent& ident_expn)  {
+            void operator()(const NodeExpnIdent& ident_expn) const {
                 if (!gen->m_vars.contains(ident_expn.ident.value.value())) {
                     std::cerr << "Could not find identifier " << ident_expn.ident.value.value() << "\n";
                     exit(EXIT_FAILURE);
@@ -76,9 +77,9 @@ public:
             Generator* gen;
             void operator()(const NodeSmtExit& smts_exit) const {
                 gen->gen_expn(smts_exit.expn);
-                gen->m_output << "    mov rax, 60\n";
+                gen->m_output << "      mov rax, 60\n";
                 gen->pop("rdi");
-                gen->m_output << "    syscall\n";
+                gen->m_output << "      syscall\n";
             }
             void operator()(const NodeSmtnaam& smts_naam) const {
                 if(gen->m_vars.contains(smts_naam.ident.value.value())) {
@@ -92,7 +93,12 @@ public:
             }
             void operator()(const NodeSmtPrint& smts_bolo) const
             {
-
+                gen->m_output << "      mov rax , 1\n";
+                gen->m_output << "      mov rdi , 1\n";
+                gen->m_output << "      mov rsi , " << gen->m_queue_data.front() << "\n";
+                gen->m_queue_data.pop();
+                gen->m_output << "      mov rdx , " << smts_bolo.size + 1 << "\n";
+                gen->m_output << "      syscall\n";
             }
         };
 
@@ -101,17 +107,19 @@ public:
     }
 
 
-
-
-
     //Combine all the statements
     [[nodiscard]] std::string gen() {
         m_output << "section .data\n";
         for(const auto& node : m_prg.smts) {
             if(auto* nstm = std::get_if<NodeSmtPrint>(&node.var))
             {
-                m_output << "   msg_"<< m_unique_msg_name <<  " " << "db '" << nstm->ident.value.value() <<  "', 0xA\n";
+                m_output << "   msg_"<< m_unique_msg_name <<  " " << "db '" << nstm->string_lit.value.value() <<  "', 0xA\n";
+                std::string temp = "msg_";
+                temp.push_back((char)(m_unique_msg_name + '0'));
+                m_queue_data.emplace(temp);
+                m_unique_msg_name++;
             }
+
         }
 
         m_output << "section .text\n";
@@ -119,18 +127,11 @@ public:
         m_output << "   _start:\n";
 
         for(const auto& node : m_prg.smts) {
-            if(auto* nstm = std::get_if<NodeSmtPrint>(&node.var))
-            {
-
-            }
-            else {
-                gen_smts(node);
-            }
-
+            gen_smts(node);
         }
-        m_output << "       mov rax, 60\n";
-        m_output << "       mov rdi, 0\n";
-        m_output << "       syscall\n";
+        m_output << "      mov rax, 60\n";
+        m_output << "      mov rdi, 0\n";
+        m_output << "      syscall\n";
 
         return m_output.str();
     }

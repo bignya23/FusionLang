@@ -13,6 +13,8 @@ int main(const int argc , char *argv[]) {
         std::cerr << "Incorrect Usage" << std::endl;
         std::cerr << "Usage: " << argv[0] << " <filename.jd>" << std::endl;
         return EXIT_FAILURE;
+
+
     }
 
     std:: string contents;
@@ -44,14 +46,14 @@ int main(const int argc , char *argv[]) {
     }
 
      //For Unix
-     // system("nasm -f elf64 -o out.o out.asm");
-     // system("ld -o output out.o");
-     // system("./output");
+     system("nasm -f elf64 -o out.o out.asm");
+     system("ld -o output out.o");
+     system("./output");
 
     // For Windows
-    system("nasm -f win64 -o out.o out.asm");
-    system("ld -o output.exe out.o");
-    system("output.exe");
+    // system("nasm -f win64 -o out.o out.asm");
+    // system("ld -o output.exe out.o");
+    // system("output.exe");
 
     return EXIT_SUCCESS;
 }

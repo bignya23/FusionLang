@@ -25,7 +25,7 @@ struct NodeSmtnaam {
 
 struct NodeSmtPrint
 {
-    Token ident;
+    Token string_lit;
     int size{};
 };
 
@@ -65,9 +65,12 @@ public:
         else if (peek().has_value() && peek().value().type == TokenType::IDENT) {
             return NodeExpn{.var = NodeExpnIdent{.ident = consume()}}; // Consumes identifier
         }
-        else {
+
+        else
+        {
             return {}; // Return an empty optional if no valid expression is found
         }
+
     }
 
     // TO return the statements by combining all the identifiers, int_lit
@@ -95,9 +98,10 @@ public:
         }
 
         // Parse 'naam' (variable assignment) statement
-        if (peek().has_value() && peek().value().type == TokenType::NAAM &&
+        else if (peek().has_value() && peek().value().type == TokenType::NAAM &&
             peek(1).has_value() && peek(1).value().type == TokenType::IDENT &&
-            peek(2).has_value() && peek(2).value().type == TokenType::EQUAL) {
+            peek(2).has_value() && peek(2).value().type == TokenType::EQUAL &&
+            peek(3).has_value()) {
 
             consume();  // consume 'naam'
 
@@ -121,16 +125,18 @@ public:
             return NodeSmt{.var = stmt_naam};
         }
         //Parse "bolo" Print Statement
-        if(peek().has_value() && peek().value().type == TokenType::BOLO &&
-            peek(1).has_value() && peek().value().type == TokenType::OPEN_P &&
-            peek(2).has_value() && peek().value().type == TokenType::IDENT &&
-            peek(3).has_value() && peek().value().type == TokenType::CLOSE_P)
+        else if(peek().has_value() && peek(0).value().type == TokenType::BOLO &&
+            peek(1).has_value() && peek(1).value().type == TokenType::OPEN_P &&
+            peek(2).has_value() && peek(2).value().type == TokenType::STRING_LIT &&
+            peek(3).has_value() && peek(3).value().type == TokenType::CLOSE_P)
         {
             consume();
             consume();
 
+            auto bolo_smt = NodeSmtPrint{.string_lit = consume()};
+            int size = bolo_smt.string_lit.value.value().size();
+            bolo_smt.size = size;
 
-            auto bolo_smt = NodeSmtPrint{.ident = consume()};
 
             consume();
 
@@ -147,9 +153,8 @@ public:
         }
 
         // If no valid statement is found
-        else {
-            return {};
-        }
+        else return {};
+
     }
 
     // To combine all the statements in a single Program

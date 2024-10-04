@@ -2,13 +2,13 @@
 
 //Types of Tokens
 enum TokenType{
-    RETURN,INT_LIT,SEMI,OPEN_P,CLOSE_P,IDENT,NAAM,EQUAL,BOLO
+    RETURN,INT_LIT,SEMI,OPEN_P,CLOSE_P,IDENT,NAAM,EQUAL,BOLO,STRING_LIT
 };
 // Token Type and val which is optional
 struct Token {
     TokenType type;
     std::optional<std::string> value;
-    std::optional<int> str_size;
+
 };
 
 class Tokenizer {
@@ -92,7 +92,7 @@ public:
                     string_ident.push_back(consume());
                 }
                 consume();
-                tokens.push_back({.type = TokenType::BOLO , .value = string_ident, .str_size = string_ident.size()});
+                tokens.push_back({.type = TokenType::STRING_LIT , .value = string_ident});
             }
             else if(peek().value() == '=') {
                 tokens.push_back({.type = TokenType::EQUAL});
