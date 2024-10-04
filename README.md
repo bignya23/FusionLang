@@ -1,4 +1,4 @@
-# SimpleLang
+# FusionLang
 
 
 ## Overview
