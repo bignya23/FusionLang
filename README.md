@@ -24,10 +24,6 @@ Jugaad Lang's grammar is defined using ANTLR, supporting key constructs:
   - `dekhteHain`: For conditional statements.
   - `firse`/`jabTak`: For loops.
 
-## Current Implementation Status
-
-- The **`khatam`** keyword is currently implemented for exiting a function or statement.
-- Additional features such as printing, variable declarations, function definitions, and loops are planned for future implementation.
 
 ## Getting Started
 
