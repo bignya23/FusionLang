@@ -1,5 +1,6 @@
-
 naam x = 10;
-
 bolo("Hello World");
+naam y = 1;
+bolo("A toy Programming Language Conpiler");
+naam z = x;
 khatam 0;
