@@ -3,7 +3,7 @@
 
 ## Overview
 
-**Simple Lang** is a new programming language designed for flexibility and ease of use, incorporating innovative syntax inspired by everyday language. This project aims to provide developers with a unique programming experience.
+**FusionLang** is a new programming language designed for flexibility and ease of use, incorporating innovative syntax inspired by everyday language. This project aims to provide developers with a unique programming experience.
 
 ## Features
 
