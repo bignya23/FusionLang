@@ -13,7 +13,7 @@
 
 ## Grammar
 
-Jugaad Lang's grammar is defined using ANTLR, supporting key constructs:
+Fusion Lang's grammar is defined using ANTLR, supporting key constructs:
 
 - **Statements**: Includes print statements, variable declarations, function definitions, conditionals, loops, and exit statements.
 - **Keywords**:
