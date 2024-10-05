@@ -19,10 +19,11 @@ Fusion Lang's grammar is defined using ANTLR, supporting key constructs:
 - **Keywords**:
   - `bolo`: For printing output. // `IMPLEMENTED FOR ONLY PRINTING STRING LITERALS`
   - `naam`: To declare variables. // `IMPLEMENTED`
-  - `kaamChalau`: For defining functions.
+  - `bulao`: For defining functions.
   - `khatam`: To exit functions or statements. // `IMPLEMENTED`
-  - `dekhteHain`: For conditional statements.
-  - `firse`/`jabTak`: For loops.
+  - `agar, nahi_toh, warna`: For conditional statements.
+  - `firse`: For for loops.
+  - `jab_tak` : For while loops
 
 
 ## Getting Started
