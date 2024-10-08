@@ -79,7 +79,7 @@ Copy this text into your GitHub README file to document your programming languag
 
 Here's how you can include installation instructions for CMake and NASM in your `README.md` under the "Getting Started" section:
 
-```markdown
+
 # Getting Started
 
 To get started with **FusionLang**, follow these steps:
@@ -189,7 +189,7 @@ If you have a file named `example.fl`, you would run:
 ```bash
 ./Fusionlang example.fl
 ```
-```
+
 
 ### Summary
 - The installation instructions for both CMake and NASM include commands for Ubuntu and methods for Windows and macOS, making it accessible for users on different platforms.
