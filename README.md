@@ -29,7 +29,7 @@ Fusion Lang's grammar is defined using ANTLR, supporting key constructs:
 Here's the README file in Markdown format, styled for GitHub so you can copy it directly:
 
 
-# My Programming Language Documentation
+# FusionLang Documentation
 
 ## Table of Contents
 - [Comments](#comments)
