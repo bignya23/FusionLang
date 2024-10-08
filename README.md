@@ -26,10 +26,24 @@ Fusion Lang's grammar is defined using ANTLR, supporting key constructs:
   - `firse`: For for loops.
   - `jab_tak` : For while loops
 
- ## Code
-  - For declaring variables
-  - '''naam x = 10;''' // For INT LIT
-  - '''naam x = "STRING";''' // For Strings
+# My Programming Language Documentation
+
+## Table of Contents
+- [Comments](#comments)
+- [Variable Declaration](#variable-declaration)
+- [Output Statement](#output-statement)
+- [Program Termination](#program-termination)
+- [Example Usage](#example-usage)
+
+---
+
+### Comments
+Comments in the code are used to add explanatory notes or temporarily disable code. There are two types of comments:
+  
+- **Single-Line Comments**: Denoted by `//`. Anything following `//` on the same line is a comment and will not be executed.
+  ```plaintext
+  // This is a single-line comment
+
 
 
 ## Getting Started
