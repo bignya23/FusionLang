@@ -36,8 +36,6 @@ Here's the README file in Markdown format, styled for GitHub so you can copy it 
 - [Variable Declaration](#variable-declaration)
 - [Output Statement](#output-statement)
 - [Program Termination](#program-termination)
-- [Example Usage](#example-usage)
-
 
 
 ### Comments
