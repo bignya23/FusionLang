@@ -75,10 +75,6 @@ End the program with the `khatam` command and an exit code.
 
 
 Copy this text into your GitHub README file to document your programming language syntax!
-## Getting Started
-
-Here's how you can include installation instructions for CMake and NASM in your `README.md` under the "Getting Started" section:
-
 
 # Getting Started
 
