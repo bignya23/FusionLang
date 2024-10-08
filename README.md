@@ -26,6 +26,9 @@ Fusion Lang's grammar is defined using ANTLR, supporting key constructs:
   - `firse`: For for loops.
   - `jab_tak` : For while loops
 
+Here's the README file in Markdown format, styled for GitHub so you can copy it directly:
+
+```markdown
 # My Programming Language Documentation
 
 ## Table of Contents
@@ -38,14 +41,65 @@ Fusion Lang's grammar is defined using ANTLR, supporting key constructs:
 ---
 
 ### Comments
-Comments in the code are used to add explanatory notes or temporarily disable code. There are two types of comments:
+Comments in the code are used for adding explanatory notes or temporarily disabling code. There are two types of comments:
   
 - **Single-Line Comments**: Denoted by `//`. Anything following `//` on the same line is a comment and will not be executed.
   ```plaintext
   // This is a single-line comment
+  ```
 
+- **Multiline Comments**: Wrapped between `/*` and `*/`. Text within this range is treated as a comment and ignored by the compiler.
+  ```plaintext
+  /* This is a 
+     multiline 
+     comment */
+  ```
 
+### Variable Declaration
+Variables are declared using the keyword `naam` followed by the variable name, an equals sign `=`, and the value. Statements end with a semicolon `;`.
+  ```plaintext
+  naam x = 1340;
+  naam y = 2000;
+  ```
 
+### Output Statement
+The `bolo` command is used to print messages to the screen. Text to be printed is placed within quotation marks and parentheses. To include variable values within the output, use `{variable_name}` within the text.
+  ```plaintext
+  bolo("Hello World");
+  bolo("The value of x is {x}");
+  ```
+
+### Program Termination
+End the program with the `khatam` command, followed by an exit code.
+  ```plaintext
+  khatam 0;
+  ```
+
+### Example Usage
+Below is an example program demonstrating comments, variable declaration, output statements, and program termination:
+
+```plaintext
+bolo("Hello World");
+ // This is a comment
+naam x = 1340;
+
+/* This is a
+   multiline
+   comment */
+naam z = 345356;
+
+bolo("The value of x is {x} and the value of z is {z}");
+
+naam y = 10234;
+
+bolo("The value of x is {y} and the value of z is {x}");
+// This is a comment
+
+khatam 0;
+```
+```
+
+Copy this text into your GitHub README file to document your programming language syntax!
 ## Getting Started
 
 To get started with Fusion Lang:
