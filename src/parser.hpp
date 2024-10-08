@@ -1,4 +1,5 @@
 #pragma once
+#include <unordered_map>
 #include <variant>
 #include "tokenization.hpp"
 
@@ -21,12 +22,14 @@ struct NodeSmtExit {
 struct NodeSmtnaam {
     Token ident;
     NodeExpn expn;
+
 };
 
 struct NodeSmtPrint
 {
-    Token string_lit;
+    std::vector<Token> string_lit;
     int size{};
+
 };
 
 struct NodeSmt {
@@ -54,6 +57,7 @@ private:
     inline Token consume() {
         return m_tokens.at(m_index++);
     }
+    std::unordered_map<std::string, int> m_stack_v;
 public:
     inline explicit Parser(std::vector<Token> tokens): m_tokens(std::move(tokens)) {
     }
@@ -107,13 +111,16 @@ public:
 
             auto stmt_naam = NodeSmtnaam({.ident = consume()});  // consume IDENT
             consume();  // consume '='
-
-            if (auto node_expr = parse_expn()) {
+            if(auto node_expr = parse_expn())
+            {
                 stmt_naam.expn = node_expr.value();
+
+
             } else {
-                std::cerr << "Error: Failed to parse expression for 'Naam'" << std::endl;
+                std::cerr << "Error: Failed to parse expression for 'naam'" << std::endl;
                 exit(EXIT_FAILURE);
             }
+
 
             if (peek().has_value() && peek().value().type == TokenType::SEMI) {
                 consume();  // consume ';'
@@ -126,18 +133,20 @@ public:
         }
         //Parse "bolo" Print Statement
         else if(peek().has_value() && peek(0).value().type == TokenType::BOLO &&
-            peek(1).has_value() && peek(1).value().type == TokenType::OPEN_P &&
-            peek(2).has_value() && peek(2).value().type == TokenType::STRING_LIT &&
-            peek(3).has_value() && peek(3).value().type == TokenType::CLOSE_P)
+            peek(1).has_value() && peek(1).value().type == TokenType::OPEN_P)
+            // peek(2).has_value() && peek(2).value().type == TokenType::STRING_LIT &&
+            // peek(3).has_value() && peek(3).value().type == TokenType::CLOSE_P)
         {
             consume();
             consume();
+            std::vector<Token> string_var;
+            int com_size{};
 
-            auto bolo_smt = NodeSmtPrint{.string_lit = consume()};
-            int size = bolo_smt.string_lit.value.value().size();
-            bolo_smt.size = size;
-
-
+            while(peek().value().type != TokenType::CLOSE_P)
+            {
+                com_size += peek().value().value->size();
+                string_var.push_back(consume());
+            }
             consume();
 
             if(peek().has_value() && peek().value().type == TokenType::SEMI)
@@ -149,11 +158,11 @@ public:
                 std::cerr << "Expected ';' after 'bolo' statement" << std::endl;
                 exit(EXIT_FAILURE);
             }
-            return NodeSmt{.var = bolo_smt};
+            return NodeSmt{NodeSmtPrint{.string_lit = string_var, .size = com_size}};
         }
 
         // If no valid statement is found
-        else return {};
+        return {};
 
     }
 

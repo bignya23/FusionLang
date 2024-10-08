@@ -1,6 +1,15 @@
-naam x = 10;
 bolo("Hello World");
-naam y = 1;
-bolo("A toy Programming Language Conpiler");
-naam z = x;
+
+naam x = 1340;
+
+naam z = 345356;
+
+bolo("The value of x is {x} and the value of z is {z}");
+
+naam y = 10234;
+
+bolo("The value of x is {y} and the value of z is {x}");
+
 khatam 0;
+
+

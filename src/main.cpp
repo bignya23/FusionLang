@@ -6,6 +6,7 @@
 #include "tokenization.hpp"
 #include "parser.hpp"
 #include "generation.hpp"
+#include <regex.h>
 
 int main(const int argc , char *argv[]) {
 
