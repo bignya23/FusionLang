@@ -40,6 +40,27 @@ public:
     {
         std::vector<Token> tokens;
         while(peek().has_value()) {
+
+            // For Comments
+            if(peek().value() == '/' && peek(1).value() == '/')
+            {
+                while(peek().value() != '\n')
+                {
+                    consume();
+                }
+            }
+            if(peek().value() == '/' && peek(1).value() == '*')
+            {
+                consume();
+                consume();
+                while(peek().value() != '*' && peek(1).value() != '/')
+                {
+                    consume();
+                }
+                consume();
+                consume();
+            }
+
             if(std::isalpha(peek().value()))
             {
                 tokens.push_back(tokenizeIdentifier());
