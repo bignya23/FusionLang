@@ -170,7 +170,6 @@ public:
         case ')':
             consume();
             return {.type = TokenType::CLOSE_P};
-
         case ';':
             consume();
             return {.type = TokenType::SEMI};

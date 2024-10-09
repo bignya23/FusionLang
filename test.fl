@@ -1,17 +1,8 @@
-bolo("Hello World");
  // This is a comment
-naam x = 1340;
- /* This  is a
- multiline
-comment */
-naam z = 345356;
+naam x = "HELLO";
+naam y = "6";
 
-bolo("The value of x is {x} and the value of z is {z}");
+bolo("Hello World and {x} and the value of y is {y}");
 
-naam y = 10234;
 
-bolo("The value of x is {y} and the value of z is {x}");
- // This is a comment
 khatam 0;
-
-

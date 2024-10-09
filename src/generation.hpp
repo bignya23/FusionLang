@@ -3,11 +3,7 @@
 #include <queue>
 #include <string>
 #include <unordered_map>
-
-
 #include "../src/parser.hpp"
-
-
 
 
 class Generator {
@@ -32,7 +28,7 @@ private:
     };
 
     std::unordered_map<std::string, Var> m_vars;
-    std::unordered_map<std::string, int> m_value_stack;
+    std::unordered_map<std::string, std::string> m_value_stack;
 
 
 public:
@@ -66,6 +62,10 @@ public:
                 output << "QWORD [rsp + " << (gen->m_stack_size - m_size_loc -1) * 8 << "]";
                 gen->push(output.str());
             }
+
+            void operator()(const NodeExpStrLit& str_lit_expn) const
+            {
+            }
         };
 
         ExpnVisitor expn_generate{.gen = this};
@@ -90,10 +90,6 @@ public:
                 else {
                     gen->m_vars.insert({smts_naam.ident.value.value(), Var{.m_size_loc = gen->m_stack_size}});
                     gen->gen_expn(smts_naam.expn);
-
-
-
-
                 }
             }
             void operator()(const NodeSmtPrint& smts_bolo) const
@@ -112,6 +108,26 @@ public:
         std::visit(visitor , smts.var);
     }
 
+    // void get_int_string(std::string& msg_content,const std::variant<int,std::string> var)
+    // {
+    //     struct mapVisitor
+    //     {
+    //         std::string msg;
+    //         void operator()(int val)
+    //         {
+    //             msg += std::to_string(val);
+    //         }
+    //         void operator()(std::string s)
+    //         {
+    //             std::cerr<< "Taking";
+    //             msg += s;
+    //         }
+    //     };
+    //
+    //     mapVisitor vst{.msg = msg_content};
+    //     std::visit(vst, var);
+    // }
+
 
     //Combine all the statements
     [[nodiscard]] std::string gen() {
@@ -120,8 +136,12 @@ public:
         {
             if (auto* smts_naam = std::get_if<NodeSmtnaam>(&node.var))
             {
-                if (auto smts_naam_value = std::get_if<NodeExpIntlit>(&smts_naam->expn.var)) {
-                    m_value_stack[smts_naam->ident.value.value()] = std::stoi(smts_naam_value->int_lit.value.value());
+                if (auto* smts_naam_value = std::get_if<NodeExpIntlit>(&smts_naam->expn.var)) {
+                    m_value_stack[smts_naam->ident.value.value()] = smts_naam_value->int_lit.value.value();
+                }
+                else if (auto* smts_naam_value = std::get_if<NodeExpStrLit>(&smts_naam->expn.var)) {
+                    m_value_stack[smts_naam->ident.value.value()] = smts_naam_value->string_lit.value.value();
+
                 }
             }
         }
@@ -134,12 +154,14 @@ public:
                 // Iterate through the string literals
                 for (const auto& string_lit : nstm->string_lit) {
                     if (string_lit.type == TokenType::IDENT) {
-                        // Check if the identifier is in m_value_stack
-                        if (m_value_stack.contains(string_lit.value.value())) {
-                            int value = m_value_stack[string_lit.value.value()];
-                            msg_content += std::to_string(value);
-                            // Append the integer value to the message
-                        } else {
+
+                        if (m_value_stack.contains(string_lit.value.value()))
+                        {
+
+                            msg_content += m_value_stack[string_lit.value.value()];
+                            // get_int_string(msg_content, m_value_stack[string_lit.value.value()]);
+                        }
+                        else {
                             std::cerr << "Undefined identifier: " << string_lit.value.value() << "\n";
                             exit(EXIT_FAILURE);
                         }
@@ -158,8 +180,6 @@ public:
                 m_unique_msg_name++;
             }
         }
-
-
 
 
         m_output << "section .text\n";

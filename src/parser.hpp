@@ -11,8 +11,12 @@ struct NodeExpnIdent {
     Token ident;
 };
 
+struct NodeExpStrLit {
+    Token string_lit;
+};
+
 struct NodeExpn {
-    std::variant<NodeExpIntlit, NodeExpnIdent> var;
+    std::variant<NodeExpIntlit, NodeExpnIdent,NodeExpStrLit> var;
 };
 
 struct NodeSmtExit {
@@ -66,14 +70,14 @@ public:
         if (peek().has_value() && peek().value().type == TokenType::INT_LIT) {
             return NodeExpn{.var = NodeExpIntlit{.int_lit = consume()}}; // Consumes integer literal
         }
-        else if (peek().has_value() && peek().value().type == TokenType::IDENT) {
+        if (peek().has_value() && peek().value().type == TokenType::IDENT) {
             return NodeExpn{.var = NodeExpnIdent{.ident = consume()}}; // Consumes identifier
         }
-
-        else
-        {
-            return {}; // Return an empty optional if no valid expression is found
+        if (peek().has_value() && peek().value().type == TokenType::STRING_LIT) {
+            return NodeExpn{.var = NodeExpStrLit{.string_lit = consume()}}; // Consumes String literal
         }
+        return {}; // Return an empty optional if no valid expression is found
+
 
     }
 
@@ -114,28 +118,23 @@ public:
             if(auto node_expr = parse_expn())
             {
                 stmt_naam.expn = node_expr.value();
-
-
             } else {
                 std::cerr << "Error: Failed to parse expression for 'naam'" << std::endl;
                 exit(EXIT_FAILURE);
             }
 
-
             if (peek().has_value() && peek().value().type == TokenType::SEMI) {
                 consume();  // consume ';'
             } else {
-                std::cerr << "Expected ';' after 'Naam' statement" << std::endl;
+                std::cerr << "Expected ';' after 'naam' statement" << std::endl;
                 exit(EXIT_FAILURE);
             }
 
             return NodeSmt{.var = stmt_naam};
         }
         //Parse "bolo" Print Statement
-        else if(peek().has_value() && peek(0).value().type == TokenType::BOLO &&
+        if(peek().has_value() && peek(0).value().type == TokenType::BOLO &&
             peek(1).has_value() && peek(1).value().type == TokenType::OPEN_P)
-            // peek(2).has_value() && peek(2).value().type == TokenType::STRING_LIT &&
-            // peek(3).has_value() && peek(3).value().type == TokenType::CLOSE_P)
         {
             consume();
             consume();
