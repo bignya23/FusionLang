@@ -54,10 +54,11 @@ Comments in the code are used for adding explanatory notes or temporarily disabl
   ```
 
 ### Variable Declaration
-Variables are declared using the keyword `naam` followed by the variable name, an equals sign `=`, and the value. Statements end with a semicolon `;`.
+Variables are declared using the keyword `naam` followed by the variable name, an equals sign `=`, and the value. Statements end with a semicolon `;`. For string declaration place it between "STRING".
   ```plaintext
   naam x = 1340;
   naam y = 2000;
+  naam z = "Hello World";
   ```
 
 ### Output Statement
